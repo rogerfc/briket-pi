@@ -1,0 +1,21 @@
+# ports del GPIO on estan connects les diferents entrades i sortides
+porta:
+  ino: 0
+  int: 0
+  outo: 0
+  outt: 0
+pisto:
+  ino: 0
+  int: 0
+  outo: 0
+  outt : 0
+premsa:
+  ino: 0
+  int: 0
+  outo: 0
+  outt : 0
+alimentador:
+  ino: 0
+  int: 0
+  outo: 0
+  outt : 0
