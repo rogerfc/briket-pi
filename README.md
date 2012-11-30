@@ -1,0 +1,1 @@
+Programa per controlar la briquetadora
