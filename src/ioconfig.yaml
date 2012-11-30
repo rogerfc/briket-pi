@@ -1,21 +1,25 @@
 # ports del GPIO on estan connects les diferents entrades i sortides
 porta:
-  ino: 0
-  int: 0
-  outo: 0
-  outt: 0
+  nom: 'Porta'
+  port_finaldelinia_obert: 0
+  port_finaldelinia_tancat: 0
+  port_actuador_obrir: 0
+  port_actuador_tancar: 0
 pisto:
-  ino: 0
-  int: 0
-  outo: 0
-  outt : 0
+  nom: 'Pistó'
+  port_finaldelinia_obert: 0
+  port_finaldelinia_tancat: 0
+  port_actuador_obrir: 0
+  port_actuador_tancar: 0
 premsa:
-  ino: 0
-  int: 0
-  outo: 0
-  outt : 0
+  nom: 'Premsa'
+  port_finaldelinia_obert: 0
+  port_finaldelinia_tancat: 0
+  port_actuador_obrir: 0
+  port_actuador_tancar: 0
 alimentador:
-  ino: 0
-  int: 0
-  outo: 0
-  outt : 0
+  nom: 'Alimentador'
+  port_finaldelinia_obert: 0
+  port_finaldelinia_tancat: 0
+  port_actuador_obrir: 0
+  port_actuador_tancar: 0

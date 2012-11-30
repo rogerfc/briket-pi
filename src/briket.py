@@ -4,16 +4,27 @@
 import RPi.GPIO as GPIO
 import yaml
 
+import sys
+reload(sys)
+sys.setdefaultencoding("utf-8")
+
 # to use Raspberry Pi board pin numbers
 GPIO.setmode(GPIO.BOARD)
 
 class Briket(object):
 
 	def __init__(self, ioconfig):
-		self.porta			= Component('Porta', 		ioconfig['porta']['ino'], ioconfig['porta']['int'], ioconfig['porta']['outo'], ioconfig['porta']['outt'])
-		self.pisto			= Component('Pistó', 		ioconfig['pisto']['ino'], ioconfig['pisto']['int'], ioconfig['pisto']['outo'], ioconfig['pisto']['outt'])
-		self.premsa			= Component('Premsa', 		ioconfig['premsa']['ino'], ioconfig['premsa']['int'], ioconfig['premsa']['outo'], ioconfig['premsa']['outt'])
-		self.alimentador	= Component('Alimentador',	ioconfig['alimentador']['ino'], ioconfig['alimentador']['int'], ioconfig['alimentador']['outo'], ioconfig['alimentador']['outt'])
+		self.config			= ioconfig
+		self.porta			= Component(self.config['porta'])
+		self.pisto			= Component(self.config['pisto'])
+		self.premsa			= Component(self.config['premsa'])
+		self.alimentador	= Component(self.config['alimentador'])
+
+	def __repr__(self):
+		return '<Briketadora Pi>'
+		
+	def __str__(self):
+		return 'Briket'
 
 	def baixar_porta():
 		self.porta.tancar()
@@ -48,22 +59,29 @@ class Briket(object):
 	
 class Component(object):
 	
-	def __init__(self, nom, input_obert, input_tancat, output_obrir, output_tancar):
-		self.nom 				= nom
-		self.endswitch_obert	= input_obert
-		self.endswitch_tancat	= input_tancat
-		self.actuador_obrir		= ouput_obrir
-		self.actuador_tancar	= ouput_tancar
+	def __init__(self, input_config):
+		self.config				= input_config
+		self.nom 				= input_config['nom']
+		self.endswitch_obert	= input_config['port_finaldelinia_obert']
+		self.endswitch_tancat	= input_config['port_finaldelinia_tancat']
+		self.actuador_obrir		= input_config['port_actuador_obrir']
+		self.actuador_tancar	= input_config['port_actuador_tancar']
 
 		# definim endswitches com a IN
 		GPIO.setup(self.endswitch_obert, GPIO.IN)
 		GPIO.setup(self.endswitch_tancat, GPIO.IN)
-		# definim actuadors com a OUT
+		# # definim actuadors com a OUT
 		GPIO.setup(self.actuador_obrir, GPIO.OUT)
 		GPIO.setup(self.actuador_tancar, GPIO.OUT)
-		# No se si és necessari, pero per si de cas resettejem la sortida
+		# # No se si és necessari, pero per si de cas resettejem la sortida
 		GPIO.output(self.actuador_obrir, False)
 		GPIO.output(self.actuador_tancar, False)
+
+	def __repr__(self):
+		return '<Briket Component: %s>' % self.nom
+
+	def __str__(self):
+		return '%s' % self.nom
 
 	def obrir(self):
 		pass
@@ -74,13 +92,32 @@ class Component(object):
 	@property
 	def obert(self):
 		return True if GPIO.input(self.endswitch_obert) else False
+		# return True if self.endswitch_obert else False
 
 	@property
 	def tancat(self):
 		return True if GPIO.input(self.endswitch_tancat) else False
+		# return True if self.endswitch_tancat else False
+		
+	@property
+	def estat(self):
+		if self.obert:
+			if not self.tancat:
+				return 'Obert'
+			return 'Obert i Tancat'
+		elif self.tancat:
+			return 'Tancat'
+		else:
+			return 'Ni Obert ni Tancat'
 		
 def main():
-	ioconfig = yaml.safe_load(open('src/ioconfig.yaml'))
+	ioconfig = yaml.safe_load(open('ioconfig.yaml'))
+	brik = Briket(ioconfig)
+
+	print brik
+	print brik.config
+	print brik.pisto
+	print brik.premsa.estat
 
 if __name__ == '__main__':
 	main()
