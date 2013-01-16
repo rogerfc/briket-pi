@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 
-import RPi.GPIO as GPIO
+# import RPi.GPIO as GPIO
+import fakeGPIO as GPIO
 import yaml
 
 import sys
